@@ -1,28 +1,27 @@
 package org.example.repository;
 
 import org.example.model.Cat;
-
 import java.util.List;
 
 public class SimpleCatRepository implements CatRepository {
 
     @Override
-    public boolean Create(Cat value) {
+    public boolean create(Cat value) {
         return false;
     }
 
     @Override
-    public Cat Read(Long id) {
+    public Cat read(Long id) {
         return null;
     }
 
     @Override
-    public int Update(Long id, Cat value) {
+    public int update(Long id, Cat value) {
         return 0;
     }
 
     @Override
-    public void Delete(Long id) {
+    public void delete(Long id) {
 
     }
 
