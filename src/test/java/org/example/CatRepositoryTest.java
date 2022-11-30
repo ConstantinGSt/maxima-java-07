@@ -35,7 +35,7 @@ public class CatRepositoryTest {
         List<Cat> cats = repository.findAll();
 
         Cat newCat1 = new Cat(5,"Shipa", 15,false);
-        Cat newCat1 = new Cat(3,"Barsik", 10,false);
+        Cat newCat2 = new Cat(3,"Barsik", 10,false);
 
         assertTrue(true);
     }
