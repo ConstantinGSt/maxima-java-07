@@ -11,17 +11,17 @@ public class SimpleCatRepository implements CatRepository {
     }
 
     @Override
-    public Cat read(Long id) {
+    public Cat read(Integer id) {
         return null;
     }
 
     @Override
-    public int update(Long id, Cat value) {
+    public int update(Integer id, Cat value) {
         return 0;
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
 
     }
 
