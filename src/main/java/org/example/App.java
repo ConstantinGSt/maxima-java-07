@@ -17,47 +17,24 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         Cat cat = new Cat(1, "Мурло", 4, true);
+        Cat cat2 = new Cat(2,"Murka", 5,false);
+        Cat cat3 = new Cat(3,"Barsik", 12,true);
         SimpleCatRepository simpleCat = new SimpleCatRepository("jdbc:h2:mem:test", "KisKis");
         simpleCat.createTable(simpleCat);
         simpleCat.create(cat);
-       /* try {
-            Class.forName(DB_DRIVER);
-            Connection connect = DriverManager.getConnection(DB_URL);
-            System.out.println("Соединение с БД установдленно");
+        simpleCat.read(1);
+        cat.setName("Мурлыка");
+        simpleCat.update(1, cat);
+        simpleCat.read(1);
 
-            Statement statement = connect.createStatement();
-            statement.executeUpdate("CREATE TABLE cats (Name VARCHAR(50), Weight INT)");
-            statement.executeUpdate("INSERT INTO cats(Name,Weight) VALUES ('Mursic', 10)");
-            statement.executeUpdate("INSERT INTO cats(Name,Weight) VALUES ('Ramzes', 2)");
-            statement.executeUpdate("INSERT INTO cats(Name,Weight) VALUES ('Karl', 7)");
-            statement.executeUpdate("INSERT INTO cats(Name,Weight) VALUES ('Ramzes', 12)");
+        simpleCat.create(cat2);
+        simpleCat.create(cat3);
 
-            int rows = statement.executeUpdate("UPDATE cats SET name='Viskass' WHERE Name = 'Ramzes'");
-            System.out.println("Update rows " + rows);
+        simpleCat.read(3);
+        simpleCat.delete(2);
+        simpleCat.read(2);
 
-            rows = statement.executeUpdate("DELETE FROM cats WHERE Weight=7");
-            System.out.println("Delete rows " + rows);
+        simpleCat.findAll();
 
-            statement.executeUpdate("ALTER TABLE cats ADD isAngry BIT");
-            rows = statement.executeUpdate("UPDATE cats SET isAngry=true WHERE Weight<10");
-            System.out.println("Update isAngry rows " + rows);
-
-            ResultSet result = statement.executeQuery("SELECT * FROM cats");
-            while(result.next()) {
-                String name = result.getString("Name");
-                int weight = result.getInt("Weight");
-                boolean isAngry = result.getBoolean("isAngry");
-                String template = (isAngry ? "Angry" : "Nonserious")+ " Cat %s have weight %d kg.";
-                System.out.println(String.format(template, name, weight));
-            }
-            connect.close();
-            System.out.println("Соединение с БД ЗАКРЫТО!");
-        } catch (ClassNotFoundException q) {
-            q.printStackTrace();
-            System.out.println("нет драйвера");
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Ошибка SQL");
-        }*/
     }
 }
