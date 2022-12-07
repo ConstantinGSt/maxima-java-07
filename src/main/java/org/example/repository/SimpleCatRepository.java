@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.List;
 
 public class SimpleCatRepository implements CatRepository {
-    //SimpleCatRepository simpleCat;
+    SimpleCatRepository simpleCat;
     private String dbUrl;
     private String tableName;
     private static final String DB_DRIVER = "org.h2.Driver";
@@ -20,10 +20,9 @@ public class SimpleCatRepository implements CatRepository {
     }
 
     public boolean createTable(SimpleCatRepository simpleCat) {
-        String createTableSQL = "";
-        createTableSQL = String.format("CREATE TABLE %s (Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
-        String selectTableSQL = "";
-        selectTableSQL = String.format("SELECT * FROM %s", simpleCat.getTableName());
+        String createTableSQL = String.format("CREATE TABLE %s (Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
+        String selectTableSQL = String.format("SELECT * FROM %s", simpleCat.getTableName());
+        System.out.println(createTableSQL + "\n" + selectTableSQL);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(simpleCat.getDbUrl());
@@ -55,8 +54,10 @@ public class SimpleCatRepository implements CatRepository {
 
     @Override
     public boolean create(Cat cat) {
-        String createRowSQL = "";
-        createRowSQL.format("INSERT INTO %s (Name,Weight,isAngry) VALUES (%s, %d, %b))", tableName, cat.getName(), cat.getWeight(), cat.isAngry());
+        String createRowSQL = String.format("INSERT INTO %s (id,Name,Weight,isAngry) VALUES (%d, %s, %d, %b)",
+                                                tableName, cat.getId(), cat.getName(), cat.getWeight(), cat.isAngry());
+        String selectTableSQL = String.format("SELECT * FROM %s", tableName);
+        System.out.println(createRowSQL + "\n" + selectTableSQL);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(dbUrl);
@@ -80,15 +81,14 @@ public class SimpleCatRepository implements CatRepository {
     @Override
     public Cat read(Integer id) {
         Cat cat = null;
-        String readRowsSQL = "";
-        readRowsSQL.format("SELECT %d FROM cats", id);
+        String readRowsSQL = String.format("SELECT %d FROM cats", id);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(dbUrl);
             System.out.println("Соединение с БД установдленно");
 
             Statement statement = connect.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM cats");
+            ResultSet result = statement.executeQuery(readRowsSQL);
 
             while (result.next()) {
                 String name = result.getString("Name");

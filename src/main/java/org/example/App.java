@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.model.Cat;
 import org.example.repository.SimpleCatRepository;
 
 import java.sql.Connection;
@@ -15,10 +16,10 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
-
+        Cat cat = new Cat(1, "Мурло", 4, true);
         SimpleCatRepository simpleCat = new SimpleCatRepository("jdbc:h2:mem:test", "KisKis");
         simpleCat.createTable(simpleCat);
-
+        simpleCat.create(cat);
        /* try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(DB_URL);
