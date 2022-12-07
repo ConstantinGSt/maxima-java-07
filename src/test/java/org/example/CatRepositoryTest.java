@@ -1,8 +1,5 @@
 package org.example;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.example.model.Cat;
 import org.example.repository.CatRepository;
 import org.example.repository.SimpleCatRepository;
@@ -10,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class CatRepositoryTest {
     private CatRepository repository;
@@ -36,27 +35,31 @@ public class CatRepositoryTest {
         List<Cat> cats = repository.findAll();
         assertEquals(5, cats.size());
 
-        Cat testCat1 = repository.read(3);
-        assertEquals("Barsik", testCat1.getName());
-        assertEquals(0, testCat1.getWeight());
-        assertTrue(testCat1.isAngry());
+        Cat testCat = repository.read(3);
+        assertEquals("Barsik", testCat.getName());
+        assertEquals(0, testCat.getWeight());
+        assertTrue(testCat.isAngry());
 
         Cat newCat1 = new Cat(5,"Shipa", 15,false);
         Cat newCat2 = new Cat(3,"BarsUk", 10,false);
+
+        testCat = repository.read(3);
+        assertEquals("BarsUk", testCat.getName());
+        assertEquals(10, testCat.getWeight());
+        assertFalse(testCat.isAngry());
 
         repository.update(newCat1.getId(), newCat1);
         repository.update(newCat2.getId(), newCat2);
 
         repository.delete(1);
+        testCat = repository.read(1);
+        assertNull(testCat);
+
         repository.delete(4);
-
         cats = repository.findAll();
+        assertEquals(3, cats.size());
 
-        Cat testCat = repository.read(1);
-        Cat testCat2 = repository.read(2);
-        Cat testCat3 = repository.read(3);
-        Cat testCat4 = repository.read(4);
-        Cat testCat5 = repository.read(5);
+
 
         assertTrue(true);
     }

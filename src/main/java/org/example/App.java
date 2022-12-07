@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.repository.SimpleCatRepository;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,14 +9,17 @@ import java.sql.Statement;
 
 public class App {
 
-    public static final String DB_URL = "jdbc:h2:mem:test";
-    public static final String DB_DRIVER = "org.h2.Driver";
+//    public static final String DB_URL = "jdbc:h2:mem:test";
+//    public static final String DB_DRIVER = "org.h2.Driver";
 
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        try {
+        SimpleCatRepository simpleCat = new SimpleCatRepository("jdbc:h2:mem:test", "KisKis");
+        simpleCat.createTable(simpleCat);
+
+       /* try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(DB_URL);
             System.out.println("Соединение с БД установдленно");
@@ -52,6 +57,6 @@ public class App {
         } catch(Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
-        }
+        }*/
     }
 }
