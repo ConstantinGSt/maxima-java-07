@@ -24,7 +24,7 @@ public class SimpleCatRepository implements CatRepository {
     public boolean createTable(SimpleCatRepository simpleCat) {
         String createTableSQL = String.format("CREATE TABLE %s (id INT, Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
         String selectTableSQL = String.format("SELECT * FROM %s", simpleCat.getTableName());
-        System.out.println(createTableSQL + "\n" + selectTableSQL);
+        //System.out.println(createTableSQL + "\n" + selectTableSQL);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(simpleCat.getDbUrl());
@@ -33,8 +33,8 @@ public class SimpleCatRepository implements CatRepository {
             Statement statement = connect.createStatement();
             statement.executeUpdate(createTableSQL);
 
-            // connect.close();
-            // System.out.println("Соединение с БД ЗАКРЫТО!");
+            //connect.close();
+            System.out.println("Соединение с БД НЕ ЗАКРЫТО! - иначе пустая таблица не сохранится =(");
 
         } catch (ClassNotFoundException q) {
             q.printStackTrace();
@@ -51,7 +51,7 @@ public class SimpleCatRepository implements CatRepository {
         String createRowSQL = String.format("INSERT INTO %s (id,Name,Weight,isAngry) VALUES (%d, '%s', %d, %b);",
                 tableName, cat.getId(), cat.getName(), cat.getWeight(), cat.isAngry());
         String selectTableSQL = String.format("SELECT * FROM %s", tableName);
-        System.out.println(createRowSQL + "\n" + selectTableSQL);
+       // System.out.println(createRowSQL + "\n" + selectTableSQL);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(dbUrl);
@@ -61,7 +61,7 @@ public class SimpleCatRepository implements CatRepository {
             statement.executeUpdate(createRowSQL); //"INSERT INTO KisKis (id,Name,Weight, isAngry) VALUES (1, 'Мурло', 4, true);"
 
             connect.close();
-            System.out.println("Соединение с БД ЗАКРЫТО!");
+            System.out.println("Соединение с БД ЗАКРЫТО!- изменения внесены");
         } catch (ClassNotFoundException q) {
             q.printStackTrace();
             System.out.println("нет драйвера");
@@ -150,7 +150,6 @@ public class SimpleCatRepository implements CatRepository {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
-
     }
 
     @Override
@@ -173,8 +172,11 @@ public class SimpleCatRepository implements CatRepository {
                 cat = new Cat(id, name, weight, isAngry);
                 list.add(cat);
             }
+            for (Cat cat: list) {
+                System.out.println(cat.getId());
+            }
             connect.close();
-            System.out.println("Соединение с БД ЗАКРЫТО!");
+            System.out.println("Соединение с БД ЗАКРЫТО! - был выведен смисок ID присутвующих в таблице строк");
         } catch (ClassNotFoundException q) {
             q.printStackTrace();
             System.out.println("нет драйвера");
@@ -182,9 +184,7 @@ public class SimpleCatRepository implements CatRepository {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
-        for (Cat cat: list) {
-            System.out.println(cat.getId());
-        }
+
         return list;
     }
 
