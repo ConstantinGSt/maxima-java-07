@@ -35,7 +35,6 @@ public class SimpleCatRepository implements CatRepository {
 
             //connect.close();
             System.out.println("Соединение с БД НЕ ЗАКРЫТО! - иначе пустая таблица не сохранится =(");
-
         } catch (ClassNotFoundException q) {
             q.printStackTrace();
             System.out.println("нет драйвера");
