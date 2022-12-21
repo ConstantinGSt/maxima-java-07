@@ -1,5 +1,10 @@
 package org.example.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.function.Function;
+
 public class Cat {
     private int id;
     private String name;
@@ -22,6 +27,7 @@ public class Cat {
                 ", isAngry=" + isAngry +
                 '}';
     }
+
 
     public int getId() {
         return id;
