@@ -24,7 +24,6 @@ public class SimpleCatRepository implements CatRepository {
     public boolean createTable(SimpleCatRepository simpleCat) {
         String createTableSQL = String.format("CREATE TABLE %s (id INT, Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
         String selectTableSQL = String.format("SELECT * FROM %s", simpleCat.getTableName());
-        //System.out.println(createTableSQL + "\n" + selectTableSQL);
         try {
             Class.forName(DB_DRIVER);
             Connection connect = DriverManager.getConnection(simpleCat.getDbUrl());
@@ -33,7 +32,6 @@ public class SimpleCatRepository implements CatRepository {
             Statement statement = connect.createStatement();
             statement.executeUpdate(createTableSQL);
 
-            //connect.close();
             System.out.println("Соединение с БД НЕ ЗАКРЫТО! - иначе пустая таблица не сохранится =(");
         } catch (ClassNotFoundException q) {
             q.printStackTrace();

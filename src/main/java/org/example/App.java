@@ -10,10 +10,6 @@ import java.sql.Statement;
 
 public class App {
 
-//    public static final String DB_URL = "jdbc:h2:mem:test";
-//    public static final String DB_DRIVER = "org.h2.Driver";
-
-
     public static void main(String[] args) {
         System.out.println("Hello World!");
         Cat cat = new Cat(1, "Мурло", 4, true);
