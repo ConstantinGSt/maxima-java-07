@@ -1,12 +1,9 @@
 package org.example;
 
+import com.zaxxer.hikari.HikariConfig;
 import org.example.model.Cat;
+import org.example.repository.AdvancedCatRepository;
 import org.example.repository.SimpleCatRepository;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 public class App {
 
@@ -16,6 +13,9 @@ public class App {
         Cat cat2 = new Cat(2,"Murka", 5,false);
         Cat cat3 = new Cat(3,"Barsik", 12,true);
         SimpleCatRepository simpleCat = new SimpleCatRepository("jdbc:h2:mem:test", "KisKis");
+
+        AdvancedCatRepository adCat = new AdvancedCatRepository("jdbc:h2:mem:test", "myCat");
+        adCat.createTable(adCat);
         /*simpleCat.createTable(simpleCat);
         simpleCat.create(cat);
         simpleCat.read(1);

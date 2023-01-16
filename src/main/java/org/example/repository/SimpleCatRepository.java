@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleCatRepository implements CatRepository {
-    private SimpleCatRepository simpleCat;
+    //private SimpleCatRepository simpleCat;
     private Cat cat;
     private String dbUrl;
     private String tableName;
@@ -22,7 +22,7 @@ public class SimpleCatRepository implements CatRepository {
     }
 
     public boolean createTable(SimpleCatRepository simpleCat) {
-        String createTableSQL = String.format("CREATE TABLE %s (id INT, Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
+        String createTableSQL = String.format("CREATE TABLE CREATE TABLE IF NOT EXISTS %s (id INT, Name VARCHAR(50), Weight INT, isAngry boolean)", simpleCat.getTableName());
         String selectTableSQL = String.format("SELECT * FROM %s", simpleCat.getTableName());
         try {
             Class.forName(DB_DRIVER);
