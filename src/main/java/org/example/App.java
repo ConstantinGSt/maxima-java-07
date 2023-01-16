@@ -6,7 +6,6 @@ import org.example.repository.AdvancedCatRepository;
 import org.example.repository.SimpleCatRepository;
 
 public class App {
-
     public static void main(String[] args) {
         System.out.println("Hello World!");
         Cat cat = new Cat(1, "Мурло", 4, true);
