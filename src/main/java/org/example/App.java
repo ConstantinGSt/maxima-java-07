@@ -18,6 +18,7 @@ public class App {
         adCat.create(cat);
         adCat.create(cat2);
         adCat.create(cat3);
+        adCat.read(2);
         /*simpleCat.createTable(simpleCat);
         simpleCat.create(cat);
         simpleCat.read(1);

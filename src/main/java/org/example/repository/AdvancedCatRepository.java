@@ -63,7 +63,7 @@ public class AdvancedCatRepository implements CatRepository {
                 " Weight INT, isAngry boolean)", advancedCat.getTableName());
         try {
             System.out.println("Создание таблицы");
-            Statement statement = connectionDb().createStatement();
+            Statement statement = getConnection().createStatement();
             statement.executeUpdate(createTableSQL);
 
             System.out.println("БД - created ");
@@ -80,7 +80,7 @@ public class AdvancedCatRepository implements CatRepository {
                 tableName, cat.getId(), cat.getName(), cat.getWeight(), cat.isAngry());
         try {
             System.out.println("добавим кота");
-            Statement statement = connectionDb().createStatement();
+            Statement statement = getConnection().createStatement();
             statement.executeUpdate(createRowSQL);
 
             System.out.println("добавили кота =)");
@@ -97,33 +97,88 @@ public class AdvancedCatRepository implements CatRepository {
         String readRowsSQL = String.format("SELECT * FROM %s WHERE id=%d", tableName, id);
         try {
             System.out.println("ПОЧЕТАЕМ кота =)");
-            Statement statement = connectionDb().createStatement();
-            statement.executeUpdate(readRowsSQL);
+            Statement statement = getConnection().createStatement();
+            ResultSet result = statement.executeQuery(readRowsSQL);
 
-            System.out.println("Почетатели кота раошлись =)");
+            while (result.next()) {
+                String name = result.getString("Name");
+                int weight = result.getInt("Weight");
+                boolean isAngry = result.getBoolean("isAngry");
+                String template = (isAngry ? "Angry" : "not angry:") + " Cat %s have weight %d kg.";
+                System.out.println(String.format(template, name, weight));
+                cat = new Cat(id, name, weight, isAngry);
+            }
+            return cat;
+
         } catch(Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
-        }
+        } System.out.println("Почетатели кота разошлись =)");
         return cat;
 
     }
 
     @Override
     public int update(Integer id, Cat cat) {
+        int rows = 0;
+        String updateRowsSQL = String.format("UPDATE %s SET Name='%s' WHERE id=%d", tableName, cat.getName(), id);
+        try {
+            System.out.println("изменим кота");
+            Statement statement = getConnection().createStatement();
+            rows = statement.executeUpdate(updateRowsSQL);
 
-        return 0;
+            System.out.println("изменили кота =)");
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Ошибка SQL");
+        }
+        return rows;
     }
 
     @Override
     public void delete(Integer id) {
+        String deleteRowsSQL = String.format("DELETE FROM %s WHERE id=%d", tableName, id);
+        try {
+            System.out.println("добавим кота");
+            Statement statement = getConnection().createStatement();
+            statement.executeUpdate(deleteRowsSQL);
 
+            System.out.println("добавили кота =)");
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Ошибка SQL");
+        }
     }
 
     @Override
     public List<Cat> findAll() {
-        List<Cat> cats = new ArrayList<>();
-        return cats;
+        ArrayList<Cat> list = new ArrayList<>();
+        String readAllRowsSQL = String.format("SELECT * FROM %s", tableName);
+        try {
+            System.out.println("ПОЧЕТАЕМ кота =)");
+            Statement statement = getConnection().createStatement();
+            ResultSet result = statement.executeQuery(readAllRowsSQL);
+
+            while (result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("Name");
+                int weight = result.getInt("Weight");
+                boolean isAngry = result.getBoolean("isAngry");
+                cat = new Cat(id, name, weight, isAngry);
+                list.add(cat);
+            }
+            for (Cat cat: list) {
+                System.out.println(cat.getId());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Ошибка SQL");
+        }
+        return list;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public String getDbUrl() {
