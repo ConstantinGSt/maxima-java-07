@@ -15,6 +15,9 @@ public class App {
 
         AdvancedCatRepository adCat = new AdvancedCatRepository("jdbc:h2:mem:test", "myCat");
         adCat.createTable(adCat);
+        adCat.create(cat);
+        adCat.create(cat2);
+        adCat.create(cat3);
         /*simpleCat.createTable(simpleCat);
         simpleCat.create(cat);
         simpleCat.read(1);
