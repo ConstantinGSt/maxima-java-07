@@ -28,7 +28,6 @@ public class Cat {
                 '}';
     }
 
-
     public int getId() {
         return id;
     }

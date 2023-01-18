@@ -28,7 +28,7 @@ public class AdvancedCatRepository implements CatRepository {
         this.connection = connectionDb();
     }
 
-    public Connection connectionDb() {
+    private Connection connectionDb() {
          try {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(DB_URL);
