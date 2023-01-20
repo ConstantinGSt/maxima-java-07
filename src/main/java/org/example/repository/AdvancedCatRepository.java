@@ -90,8 +90,8 @@ public class AdvancedCatRepository implements CatRepository {
                 " Weight INT, isAngry boolean)", advancedCat.getTableName());
         try {
             System.out.println("Создание таблицы");
-            Statement statement = getConnection().createStatement();
-            statement.executeUpdate(createTableSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(createTableSQL);
+            pStatement.executeUpdate();
 
             System.out.println("БД - created ");
         } catch (Exception e) {
@@ -107,8 +107,9 @@ public class AdvancedCatRepository implements CatRepository {
                 tableName, cat.getId(), cat.getName(), cat.getWeight(), cat.isAngry());
         try {
             System.out.println("добавим кота");
-            Statement statement = getConnection().createStatement();
-            statement.executeUpdate(createRowSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(createRowSQL);
+            pStatement.executeUpdate();
+
 
             System.out.println("добавили кота =)");
         } catch (Exception e) {
@@ -124,8 +125,8 @@ public class AdvancedCatRepository implements CatRepository {
         String readRowsSQL = String.format("SELECT * FROM %s WHERE id=%d", tableName, id);
         try {
             System.out.println("ПОЧЕТАЕМ кота =)");
-            Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery(readRowsSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(readRowsSQL);
+            ResultSet result = pStatement.executeQuery();
 
             while (result.next()) {
                 cat = catRowMap.apply(result);
@@ -146,8 +147,8 @@ public class AdvancedCatRepository implements CatRepository {
         String updateRowsSQL = String.format("UPDATE %s SET Name='%s' WHERE id=%d", tableName, cat.getName(), id);
         try {
             System.out.println("изменим кота");
-            Statement statement = getConnection().createStatement();
-            rows = statement.executeUpdate(updateRowsSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(updateRowsSQL);
+            rows = pStatement.executeUpdate();
 
             System.out.println("изменили кота =)");
         } catch (Exception e) {
@@ -162,8 +163,8 @@ public class AdvancedCatRepository implements CatRepository {
         String deleteRowsSQL = String.format("DELETE FROM %s WHERE id=%d", tableName, id);
         try {
             System.out.println("добавим кота");
-            Statement statement = getConnection().createStatement();
-            statement.executeUpdate(deleteRowsSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(deleteRowsSQL);
+            pStatement.executeUpdate();
 
             System.out.println("добавили кота =)");
         } catch (Exception e) {
@@ -178,8 +179,8 @@ public class AdvancedCatRepository implements CatRepository {
         String readAllRowsSQL = String.format("SELECT * FROM %s", tableName);
         try {
             System.out.println("ПОЧЕТАЕМ котов =)");
-            Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery(readAllRowsSQL);
+            PreparedStatement pStatement = getConnection().prepareStatement(readAllRowsSQL);
+            ResultSet result = pStatement.executeQuery();
 
             list = catsRMList.apply(result);
             for (Cat cat : list) {
