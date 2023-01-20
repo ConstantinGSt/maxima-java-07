@@ -5,6 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.example.model.Cat;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +15,15 @@ import java.util.Properties;
 import java.util.function.Function;
 
 public class AdvancedCatRepository implements CatRepository {
-    private AdvancedCatRepository advancedCat;
     private Cat cat;
     private String dbUrl;
     private String tableName;
-    private String db_Driver;
-    private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_URL = "jdbc:h2:mem:test";
-    private Connection connection = null;
 
+    private static String rootPath = Thread.currentThread().getContextClassLoader()
+            .getResource("").getPath(); // по хорошему вынести dbConfig
+    private static String dbConfigPath = rootPath + "db.properties"; // по хорошему вынести dbConfig
+    private Properties dbProp = new Properties(); //// по хорошему вынести dbConfig
+    private Connection connection = null;
 
     public AdvancedCatRepository(String dbUrl, String tableName) {
         this.dbUrl = dbUrl;
@@ -29,35 +32,59 @@ public class AdvancedCatRepository implements CatRepository {
     }
 
     private Connection connectionDb() {
-         try {
+        try {
+            dbProp.load(new FileInputStream(dbConfigPath));
+
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(DB_URL);
-            config.setDriverClassName(DB_DRIVER);
+            config.setJdbcUrl(dbProp.getProperty("db.url"));
+            config.setDriverClassName(dbProp.getProperty("db.driver"));
             DataSource dataSource = new HikariDataSource(config);
 
             connection = dataSource.getConnection();
             System.out.println("Соединение с БД установдленно");
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("ошибка SQL...!");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return connection;
     }
 
-    /*public Function<ResultSet, List<Cat>> catsRowMapper = catList -> {
+    private Function<ResultSet, Cat> catRowMap = resultSet -> {
         try {
-            while (catList.next()) {
-                cat.setId(catList.getInt("id"));
-                cat.setName(catList.getString("name"));
-                cat.setWeight(catList.getInt("weight"));
-                cat.setAngry(catList.getBoolean("isAngry"));
+            return new Cat(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getInt("weight"),
+                    resultSet.getBoolean("isAngry")
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
+    private Function<ResultSet, List<Cat>> catsRMList = catsList -> {
+        List<Cat> cats = new ArrayList<>();
+        try {
+            while (catsList.next()) {
+                cat = new Cat(
+                        catsList.getInt("id"),
+                        catsList.getString("name"),
+                        catsList.getInt("weight"),
+                        catsList.getBoolean("isAngry")
+                );
+                cats.add(cat);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cat;
-    };*/
+        return cats;
+    };
+
     public boolean createTable(AdvancedCatRepository advancedCat) {
         String createTableSQL = String.format("CREATE TABLE IF NOT EXISTS %s (id INT, Name VARCHAR(50)," +
                 " Weight INT, isAngry boolean)", advancedCat.getTableName());
@@ -67,7 +94,7 @@ public class AdvancedCatRepository implements CatRepository {
             statement.executeUpdate(createTableSQL);
 
             System.out.println("БД - created ");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
@@ -84,7 +111,7 @@ public class AdvancedCatRepository implements CatRepository {
             statement.executeUpdate(createRowSQL);
 
             System.out.println("добавили кота =)");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
@@ -93,7 +120,7 @@ public class AdvancedCatRepository implements CatRepository {
 
     @Override
     public Cat read(Integer id) {
-        Cat cat = null;
+        cat = null;
         String readRowsSQL = String.format("SELECT * FROM %s WHERE id=%d", tableName, id);
         try {
             System.out.println("ПОЧЕТАЕМ кота =)");
@@ -101,21 +128,16 @@ public class AdvancedCatRepository implements CatRepository {
             ResultSet result = statement.executeQuery(readRowsSQL);
 
             while (result.next()) {
-                String name = result.getString("Name");
-                int weight = result.getInt("Weight");
-                boolean isAngry = result.getBoolean("isAngry");
-                String template = (isAngry ? "Angry" : "not angry:") + " Cat %s have weight %d kg.";
-                System.out.println(String.format(template, name, weight));
-                cat = new Cat(id, name, weight, isAngry);
+                cat = catRowMap.apply(result);
+                String template = (cat.isAngry() ? "Angry" : "not angry:") + " Cat %s have weight %d kg.";
+                System.out.println(String.format(template, cat.getName(), cat.getWeight()));
             }
             return cat;
-
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
-        } System.out.println("Почетатели кота разошлись =)");
+        }
         return cat;
-
     }
 
     @Override
@@ -128,7 +150,7 @@ public class AdvancedCatRepository implements CatRepository {
             rows = statement.executeUpdate(updateRowsSQL);
 
             System.out.println("изменили кота =)");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
@@ -144,7 +166,7 @@ public class AdvancedCatRepository implements CatRepository {
             statement.executeUpdate(deleteRowsSQL);
 
             System.out.println("добавили кота =)");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
@@ -152,25 +174,18 @@ public class AdvancedCatRepository implements CatRepository {
 
     @Override
     public List<Cat> findAll() {
-        ArrayList<Cat> list = new ArrayList<>();
+        List<Cat> list = null;
         String readAllRowsSQL = String.format("SELECT * FROM %s", tableName);
         try {
-            System.out.println("ПОЧЕТАЕМ кота =)");
+            System.out.println("ПОЧЕТАЕМ котов =)");
             Statement statement = getConnection().createStatement();
             ResultSet result = statement.executeQuery(readAllRowsSQL);
 
-            while (result.next()) {
-                int id = result.getInt("id");
-                String name = result.getString("Name");
-                int weight = result.getInt("Weight");
-                boolean isAngry = result.getBoolean("isAngry");
-                cat = new Cat(id, name, weight, isAngry);
-                list.add(cat);
+            list = catsRMList.apply(result);
+            for (Cat cat : list) {
+                System.out.println(cat.getId() + " " + cat.getName() + " " + cat.getWeight());
             }
-            for (Cat cat: list) {
-                System.out.println(cat.getId());
-            }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка SQL");
         }
@@ -181,16 +196,11 @@ public class AdvancedCatRepository implements CatRepository {
         return connection;
     }
 
-    public String getDbUrl() {
-        return dbUrl;
-    }
-
     public String getTableName() {
         return tableName;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public static String getDbConfigPath() {  // по хорошему вынести dbConfig
+        return dbConfigPath;
     }
-
 }
