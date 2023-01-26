@@ -20,9 +20,9 @@ public class AdvancedCatRepository implements CatRepository {
     private String tableName;
 
     private static String rootPath = Thread.currentThread().getContextClassLoader()
-            .getResource("").getPath(); // по хорошему вынести dbConfig
-    private static String dbConfigPath = rootPath + "db.properties"; // по хорошему вынести dbConfig
-    private Properties dbProp = new Properties(); //// по хорошему вынести dbConfig
+            .getResource("").getPath(); //TODO по хорошему вынести dbConfig
+    private static String dbConfigPath = rootPath + "db.properties"; //TODO по хорошему вынести dbConfig
+    private Properties dbProp = new Properties(); //TODO по хорошему вынести dbConfig
     private Connection connection = null;
 
     public AdvancedCatRepository(String dbUrl, String tableName) {
