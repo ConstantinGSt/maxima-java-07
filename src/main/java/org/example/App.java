@@ -1,9 +1,13 @@
 package org.example;
 
 import com.zaxxer.hikari.HikariConfig;
+import org.example.config.SpringConfig;
 import org.example.model.Cat;
 import org.example.repository.AdvancedCatRepository;
 import org.example.repository.SimpleCatRepository;
+import org.example.repository.SpringCatRepository;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.FileInputStream;
 import java.io.FilterInputStream;
@@ -30,7 +34,13 @@ public class App {
 
 
         System.out.println("Hello World!");
-        Cat cat = new Cat(1, "Мурло", 4, true);
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        SpringCatRepository repo = context.getBean(SpringCatRepository.class);
+        repo.init();
+        repo.findAll().forEach(System.out::println);
+
+        /*Cat cat = new Cat(1, "Мурло", 4, true);
         Cat cat2 = new Cat(2,"Murka", 5,false);
         Cat cat3 = new Cat(3,"Barsik", 12,true);
         SimpleCatRepository simpleCat = new SimpleCatRepository("jdbc:h2:mem:test", "KisKis");
@@ -43,7 +53,7 @@ public class App {
         adCat.read(2);
         adCat.update(2, cat3);
         adCat.read(2);
-        adCat.findAll();
+        adCat.findAll();*/
         /*simpleCat.createTable(simpleCat);
         simpleCat.create(cat);
         simpleCat.read(1);

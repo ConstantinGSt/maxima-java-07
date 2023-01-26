@@ -40,6 +40,21 @@
       <version>5.0.1</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>5.3.18</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jdbc -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jdbc</artifactId>
+      <version>2.4.3</version>
+    </dependency>
+
+
   </dependencies>
 
   <build>
