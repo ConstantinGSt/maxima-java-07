@@ -21,7 +21,7 @@ public class App {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         SpringCatRepository repo = context.getBean(SpringCatRepository.class);
-        repo.init();
+       // repo.init();
 
         repo.findAll().forEach(System.out::println);
         System.out.println("Hello World!");

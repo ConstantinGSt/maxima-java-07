@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class SpringCatRepository implements  CatRepository {
     @Autowired private DataSource dataSource;
     @Autowired private RowMapper<Cat> catRowMapper;
     private JdbcTemplate jdbcTemplate;//JdbcTemplate для запросов в SQL
-
+    @PostConstruct
     public void init() {
         jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS cats (id INT, Name VARCHAR(50)," +
