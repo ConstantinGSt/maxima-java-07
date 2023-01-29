@@ -20,13 +20,13 @@ import javax.sql.DataSource;
 public class SpringConfig {
 
     @Autowired
-    private Environment env;
+    private Environment environment;
 
-    @Bean
+    @Bean // !обязательно!
     public DataSource dataSource(){
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(env.getProperty("db.url"));
-        config.setDriverClassName(env.getProperty("db.driver"));
+        config.setJdbcUrl(environment.getProperty("db.url"));
+        config.setDriverClassName(environment.getProperty("db.driver"));
         return new HikariDataSource(config);
     }
 

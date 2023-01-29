@@ -17,6 +17,7 @@ public class Cat {
         this.weight = weight;
         this.isAngry = isAngry;
     }
+    protected Cat(){}
 
     @Override
     public String toString() {

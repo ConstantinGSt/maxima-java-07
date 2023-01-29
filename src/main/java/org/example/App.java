@@ -17,29 +17,19 @@ import java.util.Properties;
 public class App {
     public static void main(String[] args) {
 
-//        try {
-//            String rootPath = Thread.currentThread().getContextClassLoader()
-//                    .getResource("").getPath(); //resources/db.properties
-//
-//        String dbConfigPath = rootPath + "db.properties";
-//        Properties dbProp = new Properties();
-//        dbProp.load(new FileInputStream(dbConfigPath));
-//
-//        String appVersion = dbProp.getProperty("version");
-//        } catch(NullPointerException e) {
-//            System.out.println("ups");;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
         System.out.println("Hello World!");
 
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         SpringCatRepository repo = context.getBean(SpringCatRepository.class);
         repo.init();
-        repo.findAll().forEach(System.out::println);
 
+        repo.findAll().forEach(System.out::println);
+        System.out.println("Hello World!");
+        //System.out.println(repo.read(3));
+        repo.delete(3);
+        repo.findAll().forEach(System.out::println);
+        repo.update(1, "Viscas");
+        repo.findAll().forEach(System.out::println);
         /*Cat cat = new Cat(1, "Мурло", 4, true);
         Cat cat2 = new Cat(2,"Murka", 5,false);
         Cat cat3 = new Cat(3,"Barsik", 12,true);

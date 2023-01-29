@@ -200,4 +200,9 @@ public class SimpleCatRepository implements CatRepository {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
+    @Override
+    public int update(int id, String value) {
+        return 0;
+    }
 }
