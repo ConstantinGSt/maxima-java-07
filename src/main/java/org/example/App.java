@@ -34,6 +34,7 @@ public class App {
         System.out.println("-----------------------");
         repo.update(2, new Cat(11, "murlishko", 100500, false));
         System.out.println("-----------------------");
+        repo.findAll().forEach(System.out::println);
         repo.read(11);
 
         /*Cat cat = new Cat(1, "Мурло", 4, true);

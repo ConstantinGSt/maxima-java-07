@@ -51,18 +51,13 @@ public class SpringCatRepository implements  CatRepository {
 
     @Override
     public int update(Integer id, Cat cat) {
-        int ids =0;
-        Map<String, Object> vlues = new HashMap<String, Object>();
-        vlues.put("id", cat.getId());
-        vlues.put("Name", cat.getName());
-        vlues.put("Weight", cat.getWeight());
-        vlues.put("isAngry", cat.isAngry());
-        jdbcTemplate.update("UPDATE cats SET id=?,Name=?,Weight=?,isAngry=? WHERE id = ?", vlues, id);
-//                vlues.getName(),
-//                vlues.getWeight(),
-//                vlues.isAngry()
-//        );
-        return ids;
+        int rows = 1;
+        jdbcTemplate.update("UPDATE cats SET id=?,Name=?,Weight=?,isAngry=? WHERE id = ?",
+                cat.getId(),
+                cat.getName(),
+                cat.getWeight(),
+                cat.isAngry(), id);
+        return rows;
     }
 
 //    @Override
