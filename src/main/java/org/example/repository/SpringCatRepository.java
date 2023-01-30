@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class SpringCatRepository implements  CatRepository {
@@ -45,8 +42,8 @@ public class SpringCatRepository implements  CatRepository {
 
     @Override
     public Cat read(Integer id) {
-        return jdbcTemplate.query("SELECT * FROM cats WHERE id = ?", new BeanPropertyRowMapper<>(Cat.class), id).get(0);
-        //BeanPropertyRowMapper<Cat>
+        return jdbcTemplate.query("SELECT * FROM cats WHERE id = ?",
+                catRowMapper, id).get(0);
     }
 
     @Override
@@ -59,11 +56,6 @@ public class SpringCatRepository implements  CatRepository {
                 cat.isAngry(), id);
         return rows;
     }
-
-//    @Override
-//    public int update(int id, String value) {
-//        return jdbcTemplate.update("UPDATE cats SET Name=? WHERE id=?", value, id);
-//    }
 
     @Override
     public void delete(Integer id) {

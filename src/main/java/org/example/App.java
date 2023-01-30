@@ -21,7 +21,7 @@ public class App {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         SpringCatRepository repo = context.getBean(SpringCatRepository.class);
-       // repo.init();
+        //repo.init();
 
         repo.findAll().forEach(System.out::println);
         System.out.println("-----------------------");
@@ -33,9 +33,8 @@ public class App {
         repo.findAll().forEach(System.out::println);
         System.out.println("-----------------------");
         repo.update(2, new Cat(11, "murlishko", 100500, false));
-        System.out.println("-----------------------");
         repo.findAll().forEach(System.out::println);
-        repo.read(11);
+        System.out.println(repo.read(11));
 
         /*Cat cat = new Cat(1, "Мурло", 4, true);
         Cat cat2 = new Cat(2,"Murka", 5,false);
