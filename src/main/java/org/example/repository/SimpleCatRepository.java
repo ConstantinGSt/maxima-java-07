@@ -201,8 +201,5 @@ public class SimpleCatRepository implements CatRepository {
         this.tableName = tableName;
     }
 
-    @Override
-    public int update(int id, String value) {
-        return 0;
-    }
+
 }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class SpringCatRepository implements  CatRepository {
@@ -48,14 +50,25 @@ public class SpringCatRepository implements  CatRepository {
     }
 
     @Override
-    public int update(Integer id, Cat value) {
-        return 0;
+    public int update(Integer id, Cat cat) {
+        int ids =0;
+        Map<String, Object> vlues = new HashMap<String, Object>();
+        vlues.put("id", cat.getId());
+        vlues.put("Name", cat.getName());
+        vlues.put("Weight", cat.getWeight());
+        vlues.put("isAngry", cat.isAngry());
+        jdbcTemplate.update("UPDATE cats SET id=?,Name=?,Weight=?,isAngry=? WHERE id = ?", vlues, id);
+//                vlues.getName(),
+//                vlues.getWeight(),
+//                vlues.isAngry()
+//        );
+        return ids;
     }
 
-    @Override
-    public int update(int id, String value) {
-        return jdbcTemplate.update("UPDATE cats SET Name=? WHERE id=?", value, id);
-    }
+//    @Override
+//    public int update(int id, String value) {
+//        return jdbcTemplate.update("UPDATE cats SET Name=? WHERE id=?", value, id);
+//    }
 
     @Override
     public void delete(Integer id) {

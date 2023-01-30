@@ -24,12 +24,18 @@ public class App {
        // repo.init();
 
         repo.findAll().forEach(System.out::println);
-        System.out.println("Hello World!");
-        //System.out.println(repo.read(3));
+        System.out.println("-----------------------");
+        repo.create(new Cat(7, "OLOLOIIIA", 28, false));
+        repo.findAll().forEach(System.out::println);
+        System.out.println("-----------------------");
+
         repo.delete(3);
         repo.findAll().forEach(System.out::println);
-        repo.update(1, "Viscas");
-        repo.findAll().forEach(System.out::println);
+        System.out.println("-----------------------");
+        repo.update(2, new Cat(11, "murlishko", 100500, false));
+        System.out.println("-----------------------");
+        repo.read(11);
+
         /*Cat cat = new Cat(1, "Мурло", 4, true);
         Cat cat2 = new Cat(2,"Murka", 5,false);
         Cat cat3 = new Cat(3,"Barsik", 12,true);

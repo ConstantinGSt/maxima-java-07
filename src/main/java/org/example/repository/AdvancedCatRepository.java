@@ -205,8 +205,4 @@ public class AdvancedCatRepository implements CatRepository {
         return dbConfigPath;
     }
 
-    @Override
-    public int update(int id, String value) {
-        return 0;
-    }
 }
