@@ -43,7 +43,7 @@ public class SpringCatRepository implements  CatRepository {
     @Override
     public Cat read(Integer id) {
         return jdbcTemplate.query("SELECT * FROM cats WHERE id = ?",
-                catRowMapper, id).get(0);
+                new BeanPropertyRowMapper<>(Cat.class), id).get(0);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SpringCatRepository implements  CatRepository {
                 cat.getId(),
                 cat.getName(),
                 cat.getWeight(),
-                cat.isAngry(), id);
+                cat.isAngry(), id);  //жаль что сдесь не работает new BeanPropertyRowMapper<>(Cat.class)
         return rows;
     }
 
